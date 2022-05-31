@@ -16,4 +16,8 @@ public class Student {
     private String email;
     private String password;
     private Date registration_date;
+    @Column(name = "telegram_id")
+    private Long telegramId;
+    @Column(name = "telegram_username")
+    private String telegramUsername;
 }
