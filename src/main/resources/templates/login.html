@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Авторизация</title>
+    <div th:replace="fragments/header :: header-css"></div>
+</head>
+<body>
+<div class="container">
+    <div class="container-fluid align-content-center">
+        <div th:fragment="login">
+            <form class="m-4" style="width: 250px" th:method="post" th:object="${user}" th:action="@{/login}">
+                <div class="form-group">
+                    <label for="inputUsername">Username</label>
+                    <input type="text" class="form-control is-invalid" id="inputUsername"  th:field="*{username}"  name="username" placeholder="Enter username" required>
+                    <div class="invalid-feedback">
+                        Please enter a username.
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Password</label>
+                    <input type="password" class="form-control" id="exampleInputPassword1" th:field="*{password}" name="password" placeholder="Password">
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
