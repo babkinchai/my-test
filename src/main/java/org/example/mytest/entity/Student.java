@@ -51,4 +51,8 @@ public class Student implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+    @Column(name = "telegram_id")
+    private Long telegramId;
+    @Column(name = "telegram_username")
+    private String telegramUsername;
 }

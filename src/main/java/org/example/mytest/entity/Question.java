@@ -4,7 +4,7 @@ import lombok.Data;
 import org.example.mytest.dto.QuestionDto;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Entity
 @Table(name = "t_question")
@@ -14,24 +14,16 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     @ManyToOne(fetch = FetchType.EAGER)
-    @NotNull
+
     private Theme theme;
-    @NotNull
+
     private String question;
-    private String answer1;
-    private String answer2;
-    private String answer3;
-    private String answer4;
-    private Integer correct_answer;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<Answer> answerList;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "correct_answer", referencedColumnName = "id")
+    private Answer correct_answer;
     private Integer question_number;
 
-    public void setAttributesFromDto(QuestionDto dto) {
-
-        question = dto.getQuestion();
-        answer1 = dto.getAnswer1();
-        answer2 = dto.getAnswer2();
-        answer3 = dto.getAnswer3();
-        answer4 = dto.getAnswer4();
-        correct_answer = dto.getCorrect_answer();
-    }
 }

@@ -3,6 +3,7 @@ package org.example.mytest.controller;
 import org.example.mytest.DAO.QuestionService;
 import org.example.mytest.DAO.ThemeService;
 import org.example.mytest.DAO.UserService;
+import org.example.mytest.dto.AnswerDto;
 import org.example.mytest.dto.QuestionDto;
 import org.example.mytest.dto.ThemeDto;
 import org.example.mytest.entity.Question;
@@ -57,10 +58,15 @@ public class MainController {
     public String getMainPage(Model model) {
         List<Theme> themeList = themeService.getAllThemes();
         List<Question> questionList = questionService.getAllQuestions();
+        QuestionDto questionDto = new QuestionDto();
+        for (int i=0; i < 4; i++) {
+          questionDto.addAnswer(new AnswerDto());
+        }
         model.addAttribute("themeDto", new ThemeDto());
-        model.addAttribute("questionDto", new QuestionDto());
+        model.addAttribute("questionDto", questionDto);
         model.addAttribute("themes", themeList);
         model.addAttribute("questions", questionList);
+
         return "/index";
     }
     @GetMapping("/themes")

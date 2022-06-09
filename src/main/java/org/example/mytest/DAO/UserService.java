@@ -16,6 +16,7 @@ import java.util.Collections;
 public class UserService implements UserDetailsService {
     @Autowired
     StudentRepository studentRepository;
+
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
     @Override

@@ -45,20 +45,21 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-6">
-                        <label for="answer1" class="form-label">Ответ 1</label>
+
+                    <div class="col-sm-6" th:each="answer, itemStat : ${questionDto.getAnswers()}">
+                        <label for="answer1" class="form-label" th:utext="Ответ + ' ' + ${itemStat.index}"></label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control" name="answer1"  id="answer1" placeholder="" value="" required="">
+                                    <input type="text" class="form-control" th:field="*{answers[__${itemStat.index}__].answer}" name="answer1"  id="answer1" placeholder="" value="" required="">
                                     <div class="input-group-text">
-                                        <label class="form-check-label" for="flexRadioDefault1"/>
-                                        <input class="form-check-input" type="radio" value="1" th:field="*{correct_answer}" id="flexRadioDefault1" >
+                                        <input class="form-check-input" type="radio" value="correct"
+                                               th:field="*{answers[__${itemStat.index}__].isCorrect}"  >
                                     </div>
                                 </div>
                             <div class="invalid-feedback">
                             Valid first name is required.
                         </div>
                     </div>
-                    <div class="col-sm-6">
+                 <!--   <div class="col-sm-6">
                         <label for="answer2" class="form-label">Ответ 2</label>
                         <div class="input-group">
                             <input type="text" class="form-control" name="answer2" id="answer2" placeholder="" value="" required="">
@@ -96,7 +97,7 @@
                         <div class="invalid-feedback">
                             Please enter a valid email address for shipping updates.
                         </div>
-                    </div>
+                    </div>-->
 
                     <div class="input-group mb-3">
                         <input class="w-50 btn btn-primary btn-lg" type="submit" value="Добавить вопрос"></input>
@@ -120,10 +121,13 @@
                     <tbody>
                     <tr th:each="question : ${questions}" >
                         <td th:utext="${question.getQuestion()}" ></td>
-                        <td th:utext="${question.getAnswer1()}" th:classappend="${question.getCorrect_answer()} == 1 ? 'correct-answer' : ''"></td>
+                        <td th:each="answer : ${question.getAnswerList()}" th:utext="${answer.getAnswer()}"
+                            th:classappend="${answer.getCorrect_answer()} != null
+                             ? 'correct-answer' : ''"></td>
+                       <!-- <td th:utext="${question.getAnswer1()}" th:classappend="${question.getCorrect_answer()} == 1 ? 'correct-answer' : ''"></td>
                         <td th:utext="${question.getAnswer2()}" th:classappend="${question.getCorrect_answer()} == 2 ? 'correct-answer' : ''"></td>
                         <td th:utext="${question.getAnswer3()}" th:classappend="${question.getCorrect_answer()} == 3 ? 'correct-answer' : ''"></td>
-                        <td th:utext="${question.getAnswer4()}" th:classappend="${question.getCorrect_answer()} == 4 ? 'correct-answer' : ''"></td>
+                        <td th:utext="${question.getAnswer4()}" th:classappend="${question.getCorrect_answer()} == 4 ? 'correct-answer' : ''"></td>-->
                         <td>
                             <form th:method="post" th:action="@{/api/questions/delete/(id=${question.getId()})}">
                                 <button type="submit" class="btn-close" aria-label="Close"/>
