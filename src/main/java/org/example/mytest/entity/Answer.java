@@ -13,12 +13,10 @@ public class Answer {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Column(name="question")
     @ManyToOne(fetch = FetchType.EAGER)
     private Question questionId;
 
-    @OneToOne(mappedBy = "correct_answer")
-    private Question correctAnswer;
+    private Boolean correctAnswer;
 
     private String answer;
 }

@@ -13,13 +13,10 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     @ManyToOne(fetch = FetchType.EAGER)
-    private Theme theme_id;
+    private Theme themeId;
     private String question;
     @Column(name = "questions")
     @OneToMany(fetch = FetchType.EAGER)
     private List<Answer> answerList;
-    @OneToOne(mappedBy = "id")
-    private Answer correct_answer;
     private Integer question_number;
-
 }

@@ -4,7 +4,6 @@ package org.example.mytest.services.impl;
 import org.example.mytest.entity.Answer;
 import org.example.mytest.entity.Question;
 import org.example.mytest.entity.Theme;
-import org.example.mytest.repository.AnswerRepository;
 import org.example.mytest.repository.ThemeRepository;
 import org.example.mytest.services.InlineKeyboardServiceInterface;
 import org.springframework.stereotype.Service;
@@ -46,11 +45,9 @@ public class InlineKeyboardService implements InlineKeyboardServiceInterface {
         List<InlineKeyboardButton> buttons = new ArrayList<InlineKeyboardButton>();
         for (Answer answer:question.getAnswerList()  ) {
             InlineKeyboardButton questionButton1 = new InlineKeyboardButton(answer.getAnswer());
-            questionButton1.setCallbackData("/theme/"+ question.getTheme_id()+"/quest/"+question.getId()+"/answer/1");
+            questionButton1.setCallbackData("/answer/"+String.valueOf(answer.getId()));
             buttons.add(questionButton1);
-
         }
-
         keyboard.add(buttons);
         inlineKeyboardMarkup.setKeyboard(keyboard);
         return inlineKeyboardMarkup;

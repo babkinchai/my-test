@@ -1,8 +1,13 @@
 package org.example.mytest.entity;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 @Entity
+@Data
+@NoArgsConstructor
 public class TestResult {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -13,5 +18,8 @@ public class TestResult {
 
     @ManyToOne()
     private Answer answer;
+
+    @ManyToOne()
+    private Theme theme;
 
 }
