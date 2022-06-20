@@ -14,7 +14,7 @@
             это сэкономит вам нервы(проблемы с кодировками, фильтры) и даст бесценный опыт в будущем -->
             © 2022 https://github.com/babkinchai
             <span sec:authorize="isAuthenticated()">| Logged user: <span sec:authentication="name"></span> |
-                Roles: <span sec:authentication="principal.authorities"></span> |
+                Roles: <span sec:authentication="principal.getAuthorities()"></span> |
                 <a th:href="@{/logout}">Sign Out</a>
             </span>
 

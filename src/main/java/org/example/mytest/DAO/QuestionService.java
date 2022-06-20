@@ -29,26 +29,21 @@ public class QuestionService {
     public Boolean save(QuestionDto dto) {
         Question question = new Question();
         List<AnswerDto> answerDtos = dto.getAnswers();
+        question.setQuestion(dto.getQuestion());
         List<Answer> list = answerDtos.stream().map(answerDto -> {
             Answer answer = new Answer();
             answer.setQuestion(question);
             answer.setAnswer(answerDto.getAnswer());
-            if (answerDto.getIsCorrect() != null) {
+            if (answerDto.getIsCorrect() == true) {
                 answer.setCorrect_answer(question);
+                question.setCorrect_answer(answer);
             }
             return answer;
         }).collect(Collectors.toList());
-        list.stream().forEach(answer -> answer.setQuestion(question));
-        ;
-
-        question.setQuestion(dto.getQuestion());
         question.setAnswerList(list);
-
-
+        list.stream().forEach(answer -> answer.setQuestion(question));
         String theme_name = dto.getTheme();
         Theme theme = themeRepository.findThemeByName(theme_name);
-
-
         question.setTheme(theme);
         questionRepository.save(question);
         return true;

@@ -27,8 +27,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .disable()
                 .authorizeRequests()
                 .antMatchers("/registration").not().fullyAuthenticated()
-                .antMatchers("/").permitAll()
-                       .antMatchers("/api", "/themes").hasRole("USER")
+                .antMatchers("/themes/**").hasAuthority("USER")
+                .antMatchers("/api/**").hasAuthority("USER")
+
                 //Доступ разрешен всем пользователям
                 .antMatchers( "/resources/**").permitAll()
                 //Все остальные страницы требуют аутентификации
