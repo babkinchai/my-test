@@ -18,5 +18,5 @@ public class Question {
     @Column(name = "questions")
     @OneToMany(fetch = FetchType.EAGER)
     private List<Answer> answerList;
-    private Integer question_number;
+    private Integer questionNumber;
 }

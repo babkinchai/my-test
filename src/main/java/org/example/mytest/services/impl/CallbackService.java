@@ -4,10 +4,7 @@ import org.example.mytest.entity.Answer;
 import org.example.mytest.entity.Question;
 import org.example.mytest.entity.Student;
 import org.example.mytest.entity.TestResult;
-import org.example.mytest.repository.AnswerRepository;
-import org.example.mytest.repository.QuestionRepository;
-import org.example.mytest.repository.StudentRepository;
-import org.example.mytest.repository.TestResultRepository;
+import org.example.mytest.repository.*;
 import org.example.mytest.services.CallbackServiceInterface;
 import org.example.mytest.services.InlineKeyboardServiceInterface;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,7 +22,7 @@ import java.util.Optional;
 @Service
 public class CallbackService extends DefaultAbsSender implements CallbackServiceInterface {
 
-    @Value("${token}")
+    @Value("${bot.token}")
     private String token;
 
     private final QuestionRepository questionRepository;
@@ -33,8 +30,9 @@ public class CallbackService extends DefaultAbsSender implements CallbackService
     private final AnswerRepository answerRepository;
     private final StudentRepository studentRepository;
     private final TestResultRepository testResultRepository;
+    private final ThemeRepository themeRepository;
 
-    public CallbackService(QuestionRepository questionRepository, InlineKeyboardServiceInterface inlineKeyboardServiceInterface, AnswerRepository answerRepository, StudentRepository studentRepository, TestResultRepository testResultRepository) {
+    public CallbackService(QuestionRepository questionRepository, InlineKeyboardServiceInterface inlineKeyboardServiceInterface, AnswerRepository answerRepository, StudentRepository studentRepository, TestResultRepository testResultRepository, ThemeRepository themeRepository) {
         super(new DefaultBotOptions());
         ;
         this.questionRepository = questionRepository;
@@ -42,6 +40,7 @@ public class CallbackService extends DefaultAbsSender implements CallbackService
         this.answerRepository = answerRepository;
         this.studentRepository = studentRepository;
         this.testResultRepository = testResultRepository;
+        this.themeRepository = themeRepository;
     }
 
     @Override
@@ -59,26 +58,25 @@ public class CallbackService extends DefaultAbsSender implements CallbackService
                 answerCallbackQuery.setText("Вы уже дали ответ на этот вопрос");
                 answerCallbackQuery.setShowAlert(false);
                 execute(answerCallbackQuery);
-                return;
             } else {
                 TestResult testResult = new TestResult();
                 testResult.setAnswer(optionalAnswer.get());
                 testResult.setStudent(student);
                 testResult.setTheme(optionalAnswer.get().getQuestionId().getThemeId());
                 testResultRepository.save(testResult);
-                if (questionRepository.existsByThemIdAndQuestion_number(
+                if (questionRepository.existsByThemeIdAndQuestionNumber(
                         optionalAnswer.get()
                                 .getQuestionId()
-                                .getThemeId().getId()
+                                .getThemeId()
                         , optionalAnswer.get().getQuestionId()
-                                .getQuestion_number() + 1)) {
+                                .getQuestionNumber() + 1)) {
 
-                    Question question = questionRepository.findByThemeIdAndQuestion_number(
+                    Question question = questionRepository.findByThemeIdAndQuestionNumber(
                             optionalAnswer.get()
                                     .getQuestionId()
-                                    .getThemeId().getId()
+                                    .getThemeId()
                             , optionalAnswer.get().getQuestionId()
-                                    .getQuestion_number() + 1);
+                                    .getQuestionNumber() + 1);
                     SendMessage message = new SendMessage();
                     message.setText("Вопрос №1\n" + question.getQuestion());
                     message.setReplyMarkup(inlineKeyboardServiceInterface.sendQuestions(question));
@@ -101,7 +99,10 @@ public class CallbackService extends DefaultAbsSender implements CallbackService
             }
         } else if (callbackQuery.getData().matches("/theme/(.*)")) {
             String themeId = callbackQuery.getData().substring(7);
-            Question question = questionRepository.findByThemeIdAndQuestion_number(Long.valueOf(themeId), 1);
+            if(!themeRepository.existsById(Long.valueOf(themeId))){
+                return;
+            }
+            Question question = questionRepository.findByThemeIdAndQuestionNumber(themeRepository.findById(Long.valueOf(themeId)).get(), 1);
             SendMessage message = new SendMessage();
             message.setText("Вопрос №1\n" + question.getQuestion());
             message.setReplyMarkup(inlineKeyboardServiceInterface.sendQuestions(question));

@@ -12,6 +12,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class InlineKeyboardService implements InlineKeyboardServiceInterface {
@@ -45,9 +46,15 @@ public class InlineKeyboardService implements InlineKeyboardServiceInterface {
         List<InlineKeyboardButton> buttons = new ArrayList<InlineKeyboardButton>();
         for (Answer answer:question.getAnswerList()  ) {
             InlineKeyboardButton questionButton1 = new InlineKeyboardButton(answer.getAnswer());
-            questionButton1.setCallbackData("/answer/"+String.valueOf(answer.getId()));
+            questionButton1.setCallbackData("/answer/"+ answer.getId());
             buttons.add(questionButton1);
         }
+        Random rnd = new Random();
+        int number = rnd.nextInt(4)%4 ;
+        InlineKeyboardButton keyboardButton=buttons.get(3);
+        buttons.set(3,buttons.get(number));
+        buttons.set(number,keyboardButton);
+
         keyboard.add(buttons);
         inlineKeyboardMarkup.setKeyboard(keyboard);
         return inlineKeyboardMarkup;
