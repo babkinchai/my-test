@@ -1,13 +1,19 @@
 package org.example.mytest.entity;
 
-import lombok.Data;
+        import lombok.Data;
 
-import javax.persistence.*;
+        import javax.persistence.*;
 
 @Entity
 @Table(name = "answer")
 @Data
 public class Answer {
+    public Answer() {
+
+    }
+    public Answer(String answer) {
+        this.answer = answer;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

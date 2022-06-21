@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <div th:replace="fragments/header :: header-css"></div>
+</head>
+<body class="bg-transparent">
+    <div th:replace="fragments/header :: header"></div>
+    <div class="container">
+
+        <div class="input-group">
+            <a th:href="@{/home}" class="btn btn-primary">Назад</a>
+        </div>
+        <form th:method="post" th:action="@{/api/themes}" th:object="${themeDto}" >
+            <label class="form-label" for="theme">Введите тему</label>
+            <div class="input-group mx-2">
+                <input class="form-control mx-1" type="text" th:field="*{name}" id="theme" required>
+                <button class="btn btn-primary" type="submit">Добавить</button>
+            </div>
+
+        </form>
+        <h2 class="display-6 text-center mb-4">Список тем</h2>
+        <div class="table-responsive">
+            <table class="table text-center">
+                <thead>
+                <tr>
+                    <th style="width: 5%;">Номер п/п</th>
+                    <th>Название темы</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr  th:each="theme : ${themes}">
+                        <td th:utext="${theme.id}"></td>
+                        <td th:utext="${theme.getName()}"></td>
+                        <td>
+                            <form th:method="post" th:action="@{/themes/delete/(id=${theme.id})}" >
+                                <button type="submit" class="btn-close" aria-label="Close"/>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
